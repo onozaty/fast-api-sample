@@ -12,3 +12,12 @@ dependencies = [
 dev = [
     "ruff>=0.13.0",
 ]
+
+[tool.ruff.lint]
+select = [
+    # https://docs.astral.sh/ruff/rules/
+    "E",   # pycodestyle error
+    "F",   # Pyflakes
+    "N",   # pep8-naming
+    "ANN", # flake8-annotations
+]
