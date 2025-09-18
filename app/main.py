@@ -1,9 +1,8 @@
 from enum import Enum
-from typing import TypedDict, Union
+from typing import Any, TypedDict, Union
 
 from fastapi import FastAPI
-
-app = FastAPI()
+from pydantic import BaseModel
 
 
 class ModelName(str, Enum):
@@ -17,12 +16,35 @@ class ModelResponse(TypedDict):
     message: str
 
 
+class Item(BaseModel):
+    name: str
+    description: Union[str, None] = None
+    price: float
+    tax: Union[float, None] = None
+
+
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
+app = FastAPI()
 
 
 @app.get("/")
 async def read_root() -> dict[str, str]:
     return {"Hello": "World"}
+
+
+@app.post("/items/")
+async def create_item(item: Item) -> dict[str, Any]:
+    item_dict = item.model_dump()
+    if item.tax is not None:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
+
+
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item: Item) -> dict[str, Any]:
+    return {"item_id": item_id, **item.model_dump()}
 
 
 @app.get("/items/{item_id}")
