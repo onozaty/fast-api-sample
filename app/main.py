@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Any, TypedDict, Union
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Query
+from pydantic import BaseModel, Field
 
 
 class ModelName(str, Enum):
@@ -16,11 +16,21 @@ class ModelResponse(TypedDict):
     message: str
 
 
-class Item(BaseModel):
+class Image(BaseModel):
+    url: str
     name: str
-    description: Union[str, None] = None
-    price: float
-    tax: Union[float, None] = None
+
+
+class Item(BaseModel):
+    name: str = Field(examples=["Foo"])
+    description: Union[str, None] = Field(
+        default=None,
+        title="The description of the item",
+        max_length=300,
+        examples=["A very nice Item"],
+    )
+    price: float = Field(examples=[35.4])
+    tax: Union[float, None] = Field(default=None, examples=[3.2])
 
 
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
@@ -57,8 +67,13 @@ async def read_item(
 
 
 @app.get("/items/")
-async def read_items(skip: int = 0, limit: int = 10) -> list[dict[str, str]]:
-    return fake_items_db[skip : skip + limit]
+async def read_items(
+    q: Union[str, None] = Query(default=None, max_length=5),
+) -> dict[str, Any]:
+    results: dict[str, Any] = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
 
 
 @app.get("/models/{model_name}")
