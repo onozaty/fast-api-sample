@@ -1,8 +1,8 @@
 {
   "name": "Python",
-  "build": {
-    "dockerfile": "./Dockerfile"
-  },
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
