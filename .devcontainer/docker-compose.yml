@@ -5,16 +5,16 @@ services:
       dockerfile: Dockerfile
       network: host
       args:
-        HTTP_PROXY: ${HTTP_PROXY}
-        HTTPS_PROXY: ${HTTPS_PROXY}
-        NO_PROXY: ${NO_PROXY}
+        HTTP_PROXY: ${HTTP_PROXY-}
+        HTTPS_PROXY: ${HTTPS_PROXY-}
+        NO_PROXY: ${NO_PROXY-}
     environment:
-      - HTTP_PROXY
-      - HTTPS_PROXY
-      - NO_PROXY
-      - http_proxy=${HTTP_PROXY}
-      - https_proxy=${HTTPS_PROXY}
-      - no_proxy=${NO_PROXY}
+      - HTTP_PROXY=${HTTP_PROXY-}
+      - HTTPS_PROXY=${HTTPS_PROXY-}
+      - NO_PROXY=${NO_PROXY-}
+      - http_proxy=${HTTP_PROXY-}
+      - https_proxy=${HTTPS_PROXY-}
+      - no_proxy=${NO_PROXY-}
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
