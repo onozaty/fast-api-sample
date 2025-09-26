@@ -2,6 +2,9 @@ FROM python:3.13
 
 RUN pip install uv
 
+RUN apt-get update && apt-get install -y \
+    sudo
+
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=1000
