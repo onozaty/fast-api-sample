@@ -10,6 +10,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
     "ruff>=0.13.0",
 ]
 
@@ -21,3 +23,24 @@ select = [
     "N",   # pep8-naming
     "ANN", # flake8-annotations
 ]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--cov=app --cov-report=term-missing --cov-report=html --cov-report=xml"
+
+[tool.coverage.run]
+source = [
+    "app",
+]
+omit = [
+    "tests/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.html]
+directory = "coverage-html"
+
+[tool.coverage.xml]
+output = "coverage.xml"
